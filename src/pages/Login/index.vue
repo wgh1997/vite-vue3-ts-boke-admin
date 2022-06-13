@@ -19,6 +19,10 @@
           @focus="onfocus"
           @blur="onblur"
         />
+        <div class="code">
+          <input v-model="login.code" type="text" placeholder="验证码" />
+          <img :src="captchaImg" alt="" @click="ongetCaptcha" />
+        </div>
         <button @click="onLogin">登录</button>
       </div>
     </div>
@@ -26,29 +30,35 @@
 </template>
 
 <script lang="ts">
-import { reactive, defineComponent, ref, onMounted } from "vue";
+import { reactive, defineComponent, ref, onMounted, Ref } from "vue";
 import { useRouter } from "vue-router";
-import { postLogin } from "../../api/login/index";
+import { postLogin, getCaptcha } from "../../api/login/index";
 export default defineComponent({
   setup() {
     const router = useRouter();
     const isActive = ref(false);
+    const captchaImg: Ref<string> = ref("");
+
     interface Login {
       username: string;
       password: string;
+      code: string;
     }
     const login: Login = reactive({
       username: "",
       password: "",
+      code: "",
     });
-    const onLogin = () => {
+    const onLogin = (): void => {
       // console.log(login);
-      postLogin({
-        userName: "2222",
-        passWord: "22222",
-      }).then((result: any) => {
+      postLogin(login).then((result: any) => {
+        const { code } = result;
         // eslint-disable-next-line prettier/prettier
-        // console.log(result);
+        if (code === 0) {
+          router.push("/");
+        } else {
+          ongetCaptcha();
+        }
       });
       // router.push("/");
     };
@@ -58,8 +68,15 @@ export default defineComponent({
     const onblur = () => {
       isActive.value = false;
     };
+    const ongetCaptcha = (): void => {
+      getCaptcha().then((res: any): void => {
+        if (res.code === 0) {
+          captchaImg.value = res.data;
+        }
+      });
+    };
     onMounted(() => {
-      // console.log("3-组件挂载到页面之后执行-----onMounted()");
+      ongetCaptcha();
     });
     return {
       isActive,
@@ -67,6 +84,8 @@ export default defineComponent({
       login,
       onfocus,
       onblur,
+      captchaImg,
+      ongetCaptcha,
     };
   },
 });
@@ -82,6 +101,16 @@ export default defineComponent({
   align-items: center;
   /* 渐变背景 */
   background: linear-gradient(200deg, #72afd3, #96fbc4);
+}
+.code {
+  display: flex;
+  input {
+    width: 198px;
+  }
+  img {
+    margin-left: 5px;
+    height: 40px;
+  }
 }
 .login-box {
   /* 相对定位 */

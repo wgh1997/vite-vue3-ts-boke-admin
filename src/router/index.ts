@@ -1,9 +1,21 @@
 //引入路由对象
+import { type } from "os";
 import { defineAsyncComponent } from "vue";
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
 
-/* 通用 */
-const global: any = [
+interface Main {
+  path: string;
+  name: string;
+  meta: {
+    title: string;
+    keepAlive: boolean;
+    sidebar: boolean;
+  };
+  component: any;
+  children: Array<RouteRecordRaw>;
+}
+/* 通用路由 */
+const global: Array<RouteRecordRaw> = [
   {
     path: "/login",
     name: "Login",
@@ -11,10 +23,10 @@ const global: any = [
       title: "登录",
       keepAlive: true,
     },
-    component: defineAsyncComponent(() => import("../pages/Login/index.vue")),
+    component: () => import("../pages/Login/index.vue"),
   },
 ];
-const main: any = {
+const main: Main = {
   path: "/",
   name: "layout",
   meta: {
@@ -22,25 +34,30 @@ const main: any = {
     keepAlive: true,
     sidebar: true,
   },
-  component: defineAsyncComponent(() => import("../layouts/index.vue")),
+  component: () => import("../layouts/index.vue"),
   children: [
     {
       path: "/home",
-      name: "home",
-      component: defineAsyncComponent(
-        () => import("../components/HelloWorld.vue")
-      ),
+      name: "首页",
+      component: () => import("../components/HelloWorld.vue"),
       meta: {
         keepAlive: true,
         sidebar: true,
       },
     },
     {
-      path: "/home2",
-      name: "首页2",
-      component: defineAsyncComponent(
-        () => import("../components/HelloWorld.vue")
-      ),
+      path: "/article",
+      name: "文章",
+      component: () => import("../pages/Article/index.vue"),
+      meta: {
+        keepAlive: true,
+        sidebar: true,
+      },
+    },
+    {
+      path: "/classification",
+      name: "分类",
+      component: () => import("../pages/Classification/index.vue"),
       meta: {
         keepAlive: true,
         sidebar: true,
@@ -48,9 +65,6 @@ const main: any = {
     },
   ],
 };
-// const routes: Array<RouteRecordRaw> = [
-
-// ];
 const routes: Array<RouteRecordRaw> = global.concat(main);
 
 const router = createRouter({

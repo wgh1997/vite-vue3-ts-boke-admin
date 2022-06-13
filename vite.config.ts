@@ -10,6 +10,16 @@ export default defineConfig({
       "@": path.resolve(__dirname, "src"),
     },
   },
+  css: {
+    preprocessorOptions: {
+      less: {
+        modifyVars: {
+          // "primary-color": "red",
+        },
+        javascriptEnabled: true,
+      },
+    },
+  },
   server: {
     host: "0.0.0.0",
     port: 3000,

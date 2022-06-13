@@ -3,12 +3,12 @@
 涉及的技术栈均采用当前最新的版本和语法：
 
 - 使用 vite 快速创建脚手架
-- 使用*typescript* 和 *Vue3* 开发
-- 采用 *vue-router*4工具 配置项目路由；
-- 采用 *pinia* 实现项目数据状态管理；
+- 使用*typescript* 和 _Vue3_ 开发
+- 采用 *vue-router*4 工具 配置项目路由；
+- 采用 _pinia_ 实现项目数据状态管理；
 - 封装 Axios 库实现与后台 http 请求交互；
-- UI 库采用流行的 *ant-design-vue*组件库完整项目实现及模块结构拆分；----后期会换成 Naive UI 
-- 约束代码风格  Eslint 支持 prettier 支持
+- UI 库采用流行的 *ant-design-vue*组件库完整项目实现及模块结构拆分;
+- 约束代码风格 Eslint 支持 prettier 支持
 - css 预处理器 less
 
 ### 目录结构
@@ -68,4 +68,3 @@ npm run lint  # eslint 检查
 
 npm run prettier # prettier 自动格式化
 ```
-

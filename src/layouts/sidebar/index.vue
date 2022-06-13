@@ -1,5 +1,5 @@
 <template>
-  <a-layout-sider v-model:collapsed="collapsed" collapsible>
+  <a-layout-sider v-model:collapsed="main.collapsed" collapsible>
     <div class="logo" />
     <a-menu v-model:selectedKeys="selectedKeys" theme="dark" mode="inline">
       <a-menu-item
@@ -26,6 +26,7 @@ import {
 } from "@ant-design/icons-vue";
 import { defineComponent, reactive, ref, toRaw } from "vue";
 import routerlist from "@/router/index";
+import { useMainStore } from "@/store/mian";
 export default defineComponent({
   components: {
     PieChartOutlined,
@@ -36,6 +37,7 @@ export default defineComponent({
   },
 
   setup() {
+    const main = useMainStore();
     const route = useRoute();
     const { options } = routerlist;
     const selectedKeys = ref<string[]>([route.path]);
@@ -52,9 +54,9 @@ export default defineComponent({
     };
     return {
       selectedKeys,
-      collapsed: ref(false),
       routerList,
       onJump,
+      main,
     };
   },
 });

@@ -11,10 +11,18 @@
           minHeight: '280px',
         }"
       >
-        <router-view v-slot="{ Component }">
-          <keep-alive :include="$route.meta.keepAlive ? '' : []">
+        <!-- <router-view v-slot="{ Component }">
+          <keep-alive :include="route.meta.keepAlive ? '' : []">
             <component :is="Component" class="component" />
           </keep-alive>
+        </router-view> -->
+
+        <router-view v-slot="{ Component }">
+          <transition name="router-fade" mode="out-in">
+            <keep-alive :include="route.meta.keepAlive ? '' : []">
+              <component :is="Component" />
+            </keep-alive>
+          </transition>
         </router-view>
       </a-layout-content>
     </a-layout>
@@ -25,7 +33,11 @@
 import Sideba from "./sidebar/index.vue";
 import Header from "./header/index.vue";
 
-import { defineComponent, ref } from "vue";
+import { defineComponent, onMounted, ref } from "vue";
+import { useRoute } from "vue-router";
+import { getInfo } from "../api/login/index";
+import { useMainStore } from "@/store/mian";
+
 export default defineComponent({
   components: {
     Sideba,
@@ -34,9 +46,13 @@ export default defineComponent({
   },
 
   setup() {
+    const route = useRoute();
+    onMounted(() => {
+      const main = useMainStore();
+      main.actionsInfo();
+    });
     return {
-      selectedKeys: ref(["1"]),
-      collapsed: ref(false),
+      route,
     };
   },
 });
