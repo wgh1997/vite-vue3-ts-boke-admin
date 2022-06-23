@@ -1,22 +1,25 @@
-<script setup lang="ts"></script>
 <template>
-  <div>222</div>
+  <div>
+    我是父组件
+    <br />
+    <button @click="onckick">按钮</button>
+    <Onw ref="I" name="我是名称" :data="data" @on-click="getList"></Onw>
+  </div>
 </template>
 
-<style scoped>
-a {
-  color: #42b983;
-}
+<script setup lang="ts">
+import { reactive, ref } from "vue";
+import Onw from "./onw.vue";
+const I = ref(null);
+const data = reactive<number[]>([1, 2, 3, 4]);
 
-label {
-  margin: 0 0.5em;
-  font-weight: bold;
-}
+const onckick = () => {
+  data.push(1);
+};
+console.log(I.value);
+const getList = (list: number[]): void => {
+  console.log(list);
+};
+</script>
 
-code {
-  background-color: #eee;
-  padding: 2px 4px;
-  border-radius: 4px;
-  color: #304455;
-}
-</style>
+<style></style>

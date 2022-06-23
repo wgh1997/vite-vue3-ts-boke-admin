@@ -16,14 +16,17 @@
             <component :is="Component" class="component" />
           </keep-alive>
         </router-view> -->
-
-        <router-view v-slot="{ Component }">
-          <transition name="router-fade" mode="out-in">
-            <keep-alive :include="route.meta.keepAlive ? '' : []">
-              <component :is="Component" />
-            </keep-alive>
-          </transition>
-        </router-view>
+        <section>
+          <router-view v-slot="{ Component }">
+            <transition name="router-fade" mode="out-in">
+              <keep-alive :include="route.meta.keepAlive ? '' : []">
+                <div :key="route.path">
+                  <component :is="Component"></component>
+                </div>
+              </keep-alive>
+            </transition>
+          </router-view>
+        </section>
       </a-layout-content>
     </a-layout>
   </a-layout>

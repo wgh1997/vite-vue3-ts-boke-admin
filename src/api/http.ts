@@ -21,13 +21,20 @@ axios.interceptors.request.use(
   }
 );
 // 响应拦截
-axios.interceptors.response.use((res) => {
-  if (res.data.code === 111) {
-    sessionStorage.setItem("token", "");
-    // token过期操作
+axios.interceptors.response.use(
+  (res) => {
+    if (res.data.code === 111) {
+      sessionStorage.setItem("token", "");
+      // token过期操作
+    }
+    return res;
+  },
+  ({ request }) => {
+    if (request.status === 401) {
+      location.replace("/login");
+    }
   }
-  return res;
-});
+);
 
 interface ResType<T> {
   code: number;
@@ -38,6 +45,9 @@ interface ResType<T> {
 interface Http {
   get<T>(url: string, params?: unknown): Promise<ResType<T>>;
   post<T>(url: string, params?: unknown): Promise<ResType<T>>;
+  put<T>(url: string, params?: unknown): Promise<ResType<T>>;
+  delete<T>(url: string, params?: unknown): Promise<ResType<T>>;
+
   upload<T>(url: string, params: unknown): Promise<ResType<T>>;
   download(url: string): void;
 }
@@ -63,6 +73,36 @@ const http: Http = {
       NProgress.start();
       axios
         .post(url, JSON.stringify(params))
+        .then((res) => {
+          NProgress.done();
+          resolve(res.data);
+        })
+        .catch((err) => {
+          NProgress.done();
+          reject(err.data);
+        });
+    });
+  },
+  put(url, params) {
+    return new Promise((resolve, reject) => {
+      NProgress.start();
+      axios
+        .put(url, params)
+        .then((res) => {
+          NProgress.done();
+          resolve(res.data);
+        })
+        .catch((err) => {
+          NProgress.done();
+          reject(err.data);
+        });
+    });
+  },
+  delete(url, params) {
+    return new Promise((resolve, reject) => {
+      NProgress.start();
+      axios
+        .delete(url, { params })
         .then((res) => {
           NProgress.done();
           resolve(res.data);

@@ -6,7 +6,7 @@ export interface Objcolumns {
 export interface ObjdataSource {
   id: string | number;
   name: string;
-  user_id: string;
+  // user_id: string;
 }
 export interface FormState {
   name: string;
